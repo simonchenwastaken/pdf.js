@@ -47,8 +47,7 @@ class InkEditor extends AnnotationEditor {
 
   #realHeight = 0;
 
-  // Modification schen  (x1, y1, x2, y2)
-  #currentDrawingRegion = {x1: 109, y1: 919, x2: 680, y2: 950};
+  #signatureRegions;
 
   static _defaultColor = null;
 
@@ -68,6 +67,8 @@ class InkEditor extends AnnotationEditor {
     this.translationX = this.translationY = 0;
     this.x = 0;
     this.y = 0;
+    // schen@verto.ca
+    this.#signatureRegions = params.signatureRegions;
 
     this.#boundCanvasMousemove = this.canvasMousemove.bind(this);
     this.#boundCanvasMouseleave = this.canvasMouseleave.bind(this);
@@ -297,9 +298,10 @@ class InkEditor extends AnnotationEditor {
    */
   #startDrawing(x, y) {
     console.log(x, y);
-    if (!this.#insideRegion(x, y, this.#currentDrawingRegion)) {
+    if (!this.#insideRegion(x, y)) {
       return;
     }
+
     this.currentPath.push([x, y]);
     this.#setStroke();
     this.ctx.beginPath();
@@ -312,7 +314,7 @@ class InkEditor extends AnnotationEditor {
    * @param {number} y
    */
   #draw(x, y) {
-    if (!this.#insideRegion(x, y, this.#currentDrawingRegion)) {
+    if (!this.#insideRegion(x, y)) {
       this.#endDrawing({offsetX: x, offsetY: y});
       return;
     }
@@ -321,15 +323,17 @@ class InkEditor extends AnnotationEditor {
     this.ctx.stroke();
   }
 
-  // returns true if inside currentRegion
-  #insideRegion(x, y, region) {
-    if (x < region.x1 || x > region.x2) {
-      return false;
-    }
-    if (y < region.y1 || y > region.y2) {
-      return false;
-    }
-    return true;
+  // returns true if inside a signature region
+  #insideRegion(x, y) {
+    return this.#signatureRegions.some((region) => {
+      if (x < region[0] || x > region[2]) {
+       return false;
+      }
+      if (y < region[1] || y > region[3]) {
+        return false;
+     }
+     return true;
+    });
   }
 
   /**
