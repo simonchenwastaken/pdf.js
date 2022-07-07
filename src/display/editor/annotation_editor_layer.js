@@ -408,7 +408,7 @@ class AnnotationEditorLayer {
       y: event.offsetY,
       signatureRegions: [
         [109, 919, 680, 950],
-        [483, 709, 872, 741],
+        [53, 1821, 775, 1855],
       ],
     });
     if (editor) {
