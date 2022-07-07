@@ -48,6 +48,8 @@ class AnnotationEditorLayer {
 
   #uiManager;
 
+  #signatureRegions = [];
+
   static _initialized = false;
 
   static _keyboardManager = new KeyboardManager([
@@ -404,6 +406,10 @@ class AnnotationEditorLayer {
       id,
       x: event.offsetX,
       y: event.offsetY,
+      signatureRegions: [
+        [109, 919, 680, 950],
+        [53, 1821, 775, 1855],
+      ],
     });
     if (editor) {
       this.add(editor);
