@@ -24,6 +24,7 @@ import { bindEvents, KeyboardManager } from "./tools.js";
 import { AnnotationEditorType } from "../../shared/util.js";
 import { FreeTextEditor } from "./freetext.js";
 import { InkEditor } from "./ink.js";
+import { options } from "yargs";
 
 /**
  * @typedef {Object} AnnotationEditorLayerOptions
@@ -406,10 +407,7 @@ class AnnotationEditorLayer {
       id,
       x: event.offsetX,
       y: event.offsetY,
-      signatureRegions: [
-        [109, 919, 680, 950],
-        [483, 709, 872, 741],
-      ],
+      signatureRegions: options.dim,
     });
     if (editor) {
       this.add(editor);
@@ -492,7 +490,7 @@ class AnnotationEditorLayer {
    * Render the main editor.
    * @param {Object} parameters
    */
-  render(parameters) {
+  render(parameters, dim) {
     this.viewport = parameters.viewport;
     bindEvents(this, this.div, ["dragover", "drop", "keydown"]);
     this.div.addEventListener("click", this.#boundClick);
