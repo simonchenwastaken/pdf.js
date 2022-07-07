@@ -24,7 +24,6 @@ import { bindEvents, KeyboardManager } from "./tools.js";
 import { AnnotationEditorType } from "../../shared/util.js";
 import { FreeTextEditor } from "./freetext.js";
 import { InkEditor } from "./ink.js";
-import { options } from "yargs";
 
 /**
  * @typedef {Object} AnnotationEditorLayerOptions
@@ -90,6 +89,7 @@ class AnnotationEditorLayer {
     this.div = options.div;
     this.#boundClick = this.click.bind(this);
     this.#boundMouseover = this.mouseover.bind(this);
+    this.signatureRegions = options.dim;
 
     for (const editor of this.#uiManager.getEditors(options.pageIndex)) {
       this.add(editor);
@@ -407,7 +407,7 @@ class AnnotationEditorLayer {
       id,
       x: event.offsetX,
       y: event.offsetY,
-      signatureRegions: options.dim,
+      signatureRegions: this.signatureRegions,
     });
     if (editor) {
       this.add(editor);
