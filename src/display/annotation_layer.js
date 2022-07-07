@@ -2457,7 +2457,7 @@ class AnnotationLayer {
    * @param {AnnotationLayerParameters} parameters
    * @memberof AnnotationLayer
    */
-  static render(parameters) {
+  static render(parameters, dimensionsArray) {
     const sortedAnnotations = [],
       popupAnnotations = [];
     // Ensure that Popup annotations are handled last, since they're dependant
@@ -2520,9 +2520,15 @@ class AnnotationLayer {
           }
         }
       }
+      if(element.data.fieldName.includes('sign')){
+        console.log(element.data)
+        dimensionsArray.push(element.data.rect)
+      }
     }
 
     this.#setAnnotationCanvasMap(div, parameters.annotationCanvasMap);
+
+    return dimensionsArray;
   }
 
   /**

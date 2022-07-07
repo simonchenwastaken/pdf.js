@@ -38,6 +38,7 @@ import { NullL10n } from "./l10n_utils.js";
  * @property {Promise<boolean>} [hasJSActionsPromise]
  * @property {Promise<Object<string, Array<Object>> | null>}
  *   [fieldObjectsPromise]
+ * @property {Array} dimRecParam
  * @property {Object} [mouseState]
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  */
@@ -74,7 +75,7 @@ class AnnotationLayerBuilder {
     this._fieldObjectsPromise = fieldObjectsPromise;
     this._mouseState = mouseState;
     this._annotationCanvasMap = annotationCanvasMap;
-
+    this.dimRecParam = [];
     this.div = null;
     this._cancelled = false;
   }
@@ -86,6 +87,7 @@ class AnnotationLayerBuilder {
    *   annotations is complete.
    */
   async render(viewport, intent = "display") {
+    let dimensionsArray = [];
     const [annotations, hasJSActions = false, fieldObjects = null] =
       await Promise.all([
         this.pdfPage.getAnnotations({ intent }),
@@ -129,7 +131,8 @@ class AnnotationLayerBuilder {
       this.pageDiv.append(this.div);
       parameters.div = this.div;
 
-      AnnotationLayer.render(parameters);
+      this.dimRecParam = AnnotationLayer.render(parameters, dimensionsArray);
+      console.log(this.dimRecParam);
       this.l10n.translate(this.div);
     }
   }

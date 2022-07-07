@@ -57,7 +57,7 @@ class AnnotationEditorLayerBuilder {
    * @param {PageViewport} viewport
    * @param {string} intent (default value is 'display')
    */
-  async render(viewport, intent = "display") {
+  async render(viewport, intent = "display", dim) {
     if (intent !== "display") {
       return;
     }
@@ -84,6 +84,7 @@ class AnnotationEditorLayerBuilder {
       annotationStorage: this.annotationStorage,
       pageIndex: this.pdfPage._pageIndex,
       l10n: this.l10n,
+      dim: dim,
     });
 
     const parameters = {

@@ -314,13 +314,13 @@ class InkEditor extends AnnotationEditor {
    * @param {number} y
    */
   #draw(x, y) {
+    this.currentPath.push([x, y]);
+    this.ctx.lineTo(x, y);
+    this.ctx.stroke();
     if (!this.#insideRegion(x, y)) {
       this.#endDrawing({offsetX: x, offsetY: y});
       return;
     }
-    this.currentPath.push([x, y]);
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
   }
 
   // returns true if inside a signature region
