@@ -2520,9 +2520,9 @@ class AnnotationLayer {
           }
         }
       }
-      if(element.data.fieldName.includes('sign')){
-        console.log(element.data)
-        dimensionsArray.push(element.data.rect)
+      if (element.data.fieldName.includes('sign')) {
+        console.log(element);
+        dimensionsArray.push(element.data.rect);
       }
     }
 

@@ -49,6 +49,8 @@ class InkEditor extends AnnotationEditor {
 
   #signatureRegions;
 
+  #startedDrawing = false;
+
   static _defaultColor = null;
 
   static _defaultThickness = 1;
@@ -306,6 +308,7 @@ class InkEditor extends AnnotationEditor {
     this.#setStroke();
     this.ctx.beginPath();
     this.ctx.moveTo(x, y);
+    this.#startedDrawing = true;
   }
 
   /**
@@ -314,13 +317,13 @@ class InkEditor extends AnnotationEditor {
    * @param {number} y
    */
   #draw(x, y) {
-    this.currentPath.push([x, y]);
-    this.ctx.lineTo(x, y);
-    this.ctx.stroke();
     if (!this.#insideRegion(x, y)) {
       this.#endDrawing({offsetX: x, offsetY: y});
       return;
     }
+    this.currentPath.push([x, y]);
+    this.ctx.lineTo(x, y);
+    this.ctx.stroke();
   }
 
   // returns true if inside a signature region
@@ -498,7 +501,10 @@ class InkEditor extends AnnotationEditor {
    * @param {MouseEvent} event
    */
   #endDrawing(event) {
-    this.#stopDrawing(event.offsetX, event.offsetY);
+    if (this.#startedDrawing) {
+      this.#stopDrawing(event.offsetX, event.offsetY);
+    }
+    this.#startedDrawing = false;
 
     this.canvas.removeEventListener("mouseleave", this.#boundCanvasMouseleave);
     this.canvas.removeEventListener("mousemove", this.#boundCanvasMousemove);
