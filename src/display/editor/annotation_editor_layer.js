@@ -48,6 +48,8 @@ class AnnotationEditorLayer {
 
   #uiManager;
 
+  #signatureRegions = [];
+
   static _initialized = false;
 
   static _keyboardManager = new KeyboardManager([
@@ -87,6 +89,7 @@ class AnnotationEditorLayer {
     this.div = options.div;
     this.#boundClick = this.click.bind(this);
     this.#boundMouseover = this.mouseover.bind(this);
+    this.signatureRegions = options.dim;
 
     for (const editor of this.#uiManager.getEditors(options.pageIndex)) {
       this.add(editor);
@@ -404,6 +407,7 @@ class AnnotationEditorLayer {
       id,
       x: event.offsetX,
       y: event.offsetY,
+      signatureRegions: this.signatureRegions,
     });
     if (editor) {
       this.add(editor);
@@ -486,7 +490,7 @@ class AnnotationEditorLayer {
    * Render the main editor.
    * @param {Object} parameters
    */
-  render(parameters) {
+  render(parameters, dim) {
     this.viewport = parameters.viewport;
     bindEvents(this, this.div, ["dragover", "drop", "keydown"]);
     this.div.addEventListener("click", this.#boundClick);

@@ -47,6 +47,10 @@ class InkEditor extends AnnotationEditor {
 
   #realHeight = 0;
 
+  #signatureRegions;
+
+  #startedDrawing = false;
+
   static _defaultColor = null;
 
   static _defaultThickness = 1;
@@ -65,6 +69,8 @@ class InkEditor extends AnnotationEditor {
     this.translationX = this.translationY = 0;
     this.x = 0;
     this.y = 0;
+    // schen@verto.ca
+    this.#signatureRegions = params.signatureRegions;
 
     this.#boundCanvasMousemove = this.canvasMousemove.bind(this);
     this.#boundCanvasMouseleave = this.canvasMouseleave.bind(this);
@@ -293,10 +299,16 @@ class InkEditor extends AnnotationEditor {
    * @param {number} y
    */
   #startDrawing(x, y) {
+    console.log(x, y);
+    if (!this.#insideRegion(x, y)) {
+      return;
+    }
+
     this.currentPath.push([x, y]);
     this.#setStroke();
     this.ctx.beginPath();
     this.ctx.moveTo(x, y);
+    this.#startedDrawing = true;
   }
 
   /**
@@ -305,9 +317,26 @@ class InkEditor extends AnnotationEditor {
    * @param {number} y
    */
   #draw(x, y) {
+    if (!this.#insideRegion(x, y)) {
+      this.#endDrawing({offsetX: x, offsetY: y});
+      return;
+    }
     this.currentPath.push([x, y]);
     this.ctx.lineTo(x, y);
     this.ctx.stroke();
+  }
+
+  // returns true if inside a signature region
+  #insideRegion(x, y) {
+    return this.#signatureRegions.some((region) => {
+      if (x < region[0] || x > region[2]) {
+       return false;
+      }
+      if (y < region[1] || y > region[3]) {
+        return false;
+     }
+     return true;
+    });
   }
 
   /**
@@ -472,7 +501,10 @@ class InkEditor extends AnnotationEditor {
    * @param {MouseEvent} event
    */
   #endDrawing(event) {
-    this.#stopDrawing(event.offsetX, event.offsetY);
+    if (this.#startedDrawing) {
+      this.#stopDrawing(event.offsetX, event.offsetY);
+    }
+    this.#startedDrawing = false;
 
     this.canvas.removeEventListener("mouseleave", this.#boundCanvasMouseleave);
     this.canvas.removeEventListener("mousemove", this.#boundCanvasMousemove);

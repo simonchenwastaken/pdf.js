@@ -215,7 +215,7 @@ class PDFPageView {
   async _renderAnnotationEditorLayer() {
     let error = null;
     try {
-      await this.annotationEditorLayer.render(this.viewport, "display");
+      await this.annotationEditorLayer.render(this.viewport, "display", this.annotationLayer.dimRecParam);
     } catch (ex) {
       error = ex;
     } finally {
