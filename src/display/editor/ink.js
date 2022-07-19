@@ -318,6 +318,7 @@ class InkEditor extends AnnotationEditor {
    */
   #draw(x, y) {
     if (!this.#insideRegion(x, y)) {
+      window.parent.postMessage({'hello': [x, y]}, 'http://localhost:5001/')
       this.#endDrawing({offsetX: x, offsetY: y});
       return;
     }
