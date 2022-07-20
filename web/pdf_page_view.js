@@ -597,6 +597,7 @@ class PDFPageView {
   }
 
   draw() {
+
     if (this.renderingState !== RenderingStates.INITIAL) {
       console.error("Must be in new state before drawing");
       this.reset(); // Ensure that we reset all state to prevent issues.

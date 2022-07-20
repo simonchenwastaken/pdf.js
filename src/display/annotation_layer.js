@@ -2449,6 +2449,8 @@ class FileAttachmentAnnotationElement extends AnnotationElement {
  * @property {Map<string, HTMLCanvasElement>} [annotationCanvasMap]
  */
 
+ window.addEventListener("message", event => AnnotationLayer.update(event.data), false);
+
 class AnnotationLayer {
   /**
    * Render a new annotation layer with all annotation elements.
@@ -2457,9 +2459,13 @@ class AnnotationLayer {
    * @param {AnnotationLayerParameters} parameters
    * @memberof AnnotationLayer
    */
+  static annotationSaved = [];
+
   static render(parameters) {
+    console.log(this.parameters)
     const sortedAnnotations = [],
       popupAnnotations = [];
+    AnnotationLayer.annotationSaved = parameters.annotations;
     // Ensure that Popup annotations are handled last, since they're dependant
     // upon the parent annotation having already been rendered (please refer to
     // the `PopupAnnotationElement.render` method); fixes issue 11362.
@@ -2533,10 +2539,11 @@ class AnnotationLayer {
    * @memberof AnnotationLayer
    */
   static update(parameters) {
-    const { annotationCanvasMap, div } = parameters;
+    console.log(AnnotationLayer.annotationSaved)
+    // const { annotationCanvasMap, div } = parameters;
 
-    this.#setAnnotationCanvasMap(div, annotationCanvasMap);
-    div.hidden = false;
+    // this.#setAnnotationCanvasMap(div, annotationCanvasMap);
+    // div.hidden = false;
   }
 
   /**

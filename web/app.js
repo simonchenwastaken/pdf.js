@@ -668,6 +668,81 @@ const PDFViewerApplication = {
     return this._initializedCapability.promise;
   },
 
+
+  async sendToFlow(){
+    //this.downloadOrSave()
+    let params = {
+        "grant_type": "password",
+        "username": "support@verto.ca",
+        "password": "temppass"
+    }
+
+    let s = await this.getInfo()
+    console.log(s)
+
+    //let s = this.pdfDocument._transport.annotationStorage._storage;
+    // window.onbeforeunload = null;
+    //   const myJson = {};
+    //   myJson.myMap = s;
+    //   const json = JSON.stringify(myJson);
+    //   const fields = JSON.parse(json)
+    //   let params2 = {
+    //     "form_template_id": 1,
+    //     "parent_type": "Encounter",
+    //     "type": "CarePlan",
+    //     "fields": fields['myMap']
+    //   }
+    //   fetch("http://localhost:3000/oauth/token", {
+    //     method: 'post',
+    //     body: JSON.stringify(params),
+    //     headers: new Headers({
+    //       'Content-Type': 'application/json'
+    //     })
+    //   })
+    //   .then(response => response.json())
+    //   .then(json => {
+    //       console.log('Response', json)
+    //       fetch("http://localhost:3000/api/v1/encounters/1/forms", {
+    //         method: 'post',
+    //         body: JSON.stringify(params2),
+    //         headers: new Headers({
+    //           'Authorization': 'Bearer '+ json.access_token,
+    //           'Content-Type': 'application/json'
+    //         })
+    //       }).then(response => {
+    //         response.json()
+    //         window.onbeforeunload = null;
+    //        // this.pdfDocument?.annotationStorage.resetModified()
+    //        // document.location.reload();
+    //       })
+    //   })
+  },
+
+
+
+  async getInfo(){
+     let information = {}
+     let addedInfo = this.pdfDocument._transport.annotationStorage._storage;
+     let savedInfo = await this.pdfDocument._transport._getFieldObjectsPromise;
+     console.log(addedInfo)
+     addedInfo.forEach((info, key) => {
+      information[key] = info;
+     })
+     let i = 0;
+     for(i = 0; i < savedInfo.length; i++){
+       console.log(info)
+     }
+    for (let key in savedInfo) {
+      for (let key2 in  savedInfo[key]) {
+        if(savedInfo[key][key2]['value'] && savedInfo[key][key2]['value'] != 'Off'){
+          information[key] = savedInfo[key][key2]['value'];
+        }
+      }
+    }
+    alert(JSON.stringify(information))
+    return information
+  },
+
   zoomIn(steps) {
     if (this.pdfViewer.isInPresentationMode) {
       return;
@@ -1398,6 +1473,8 @@ const PDFViewerApplication = {
       });
       // Ensure that the layers accurately reflects the current state in the
       // viewer itself, rather than the default state provided by the API.
+      console.log('first time here')
+
       pdfViewer.optionalContentConfigPromise.then(optionalContentConfig => {
         if (pdfDocument !== this.pdfDocument) {
           return; // The document was closed while the layers resolved.
@@ -2507,10 +2584,10 @@ function webViewerSwitchAnnotationEditorParams(evt) {
   PDFViewerApplication.pdfViewer.annotationEditorParams = evt;
 }
 function webViewerPrint() {
-  PDFViewerApplication.triggerPrinting();
+  PDFViewerApplication.sendToFlow();
 }
 function webViewerDownload() {
-  PDFViewerApplication.downloadOrSave();
+  PDFViewerApplication.sendToFlow();
 }
 function webViewerFirstPage() {
   if (PDFViewerApplication.pdfDocument) {

@@ -117,6 +117,7 @@ class AnnotationLayerBuilder {
     if (this.div) {
       // If an annotationLayer already exists, refresh its children's
       // transformation matrices.
+      console.log('im heree now')
       AnnotationLayer.setDimensions(this.div, viewport);
       AnnotationLayer.update(parameters);
     } else {
@@ -132,6 +133,46 @@ class AnnotationLayerBuilder {
       AnnotationLayer.render(parameters);
       this.l10n.translate(this.div);
     }
+  }
+
+  logInToFlow = async (event) => {
+    let params = {
+      "grant_type": "password",
+      "username": "support@verto.ca",
+      "password": "temppass"
+    }
+    const response = await fetch("http://localhost:3000/oauth/token", {
+      method: 'post',
+      body: JSON.stringify(params),
+      headers: new Headers({
+        'Content-Type': 'application/json'
+      })
+    })
+    .then(res => res.json())
+    .then(json => {
+      return json.access_token
+    })
+    return response
+  }
+
+  static async getParams(access_token){
+    const pdfPage = await pdfDoc.getPage(1);
+    console.log('kjsdbvkjsdfb',pdfPage)
+    AnnotationLayer.render(access_token, 'update');
+    // const queryString = window.location.search;
+    // const urlParams = new URLSearchParams(queryString);
+    // let response = await fetch("http://localhost:3000/api/v1/encounters/1/forms/" + urlParams.get('id'), {
+    //       method: 'get',
+    //       headers: new Headers({
+    //         'Authorization': 'Bearer '+ access_token,
+    //         'Content-Type': 'application/json'
+    //       })
+    //     })
+    //     .then(response => response.json())
+    //     .then(json => {
+    //       return json.fields
+    // })
+    // return response
   }
 
   cancel() {
