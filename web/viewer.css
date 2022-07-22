@@ -27,7 +27,7 @@
   --doorhanger-icon-opacity: 0.9;
 
   --main-color: rgba(12, 12, 13, 1);
-  --body-bg-color: rgba(237, 237, 240, 1);
+  --body-bg-color: #767676;
   /*#if !MOZCENTRAL*/
   --errorWrapper-bg-color: rgba(255, 110, 110, 1);
   /*#endif*/
@@ -43,7 +43,7 @@
 
   --sidebar-narrow-bg-color: rgba(237, 237, 240, 0.9);
   --sidebar-toolbar-bg-color: rgba(245, 246, 247, 1);
-  --toolbar-bg-color: rgba(249, 249, 250, 1);
+  --toolbar-bg-color: #4c4c4c;
   --toolbar-border-color: rgba(204, 204, 204, 1);
   --button-hover-color: rgba(221, 222, 223, 1);
   --toggled-btn-color: rgba(0, 0, 0, 1);
